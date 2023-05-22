@@ -4,48 +4,78 @@
  */
 package controllers;
 
-import java.util.AbstractSet;
+import controllers.managers.AccountManager;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import models.Account;
+import tools.FileHandle;
+import tools.InputHandle;
 
 /**
  *
  * @author Administrator
  */
 public class AccountAuthenticator {
-    private Set<Account> accounts = new HashSet<>() ;
-    public void init(String path){
-        
-    }
-    
-}
 
-class Account{
-    private String id ;
-    private String role ;
-    private String password ;
-    private String pId ;
+    private AccountManager accounts;
 
-    public Account(String id, String role, String password, String pId) {
-        this.id = id;
-        this.role = role;
-        this.password = password;
-        this.pId = pId;
+    public AccountAuthenticator(String path) {
+        this.accounts = new AccountManager(path);
     }
 
-    public String getId() {
-        return id;
+    public int login() {
+        while (true) {
+            String id, password;
+            //Enter id
+            while (true) {
+                id = InputHandle.getString("Enter id AXXX: ");
+                if (id.matches("A\\d{3}")) {
+                    break;
+                }
+            }
+            //Enter password
+            while (true) {
+                password = InputHandle.getString("Enter password: ");
+                if (checkValidPass(password)) {
+                    break;
+                } else {
+                    System.out.println("Password must be at least 8 characters comprised by at least one character, one digit, and one special symbol");
+                }
+            }
+            //Check login information then return status code -1:failed, 0:user, 1:dev 
+            int status = accounts.authenticate(id, password) ;
+            if (status == -1) System.out.println("Failed login. Password or id not match.");
+            else{
+                System.out.println("Successfully login.");
+                return status;
+            }
+        }
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getpId() {
-        return pId;
+    private boolean checkValidPass(String pass) {
+        if (pass.length() < 8) {
+            return false;
+        }
+        boolean hasAlphabeticLetter = false;
+        boolean hasDigit = false;
+        boolean hasSpecial = false;
+        for (int i = 0; i < pass.length(); i++) {
+            char c = pass.charAt(i);
+            if (Character.isUpperCase(c) || Character.isLowerCase(c)) {
+                hasAlphabeticLetter = true;
+            } else if (Character.isDigit(c)) {
+                hasDigit = true;
+            } else if (Character.isLetterOrDigit(c)) {
+                hasSpecial = true;
+            }
+            if (hasAlphabeticLetter && hasDigit && hasSpecial) {
+                break;
+            }
+        }
+        if (!hasAlphabeticLetter || !hasDigit || !hasSpecial) {
+            return false;
+        }
+        return true;
     }
 }

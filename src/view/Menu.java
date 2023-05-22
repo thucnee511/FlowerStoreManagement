@@ -27,7 +27,7 @@ public class Menu {
     public void printMenu(){
         System.out.println(title);
         for(String s : options){
-            System.out.println(options.indexOf(s)+1 + ". " + s);
+            System.out.println(options.indexOf(s)+1 + "-" + s);
         }
     }
     

@@ -80,7 +80,7 @@ public class InputHandle {
         }
     }
 
-    public static double getPositiveReal(String inputMsg, String errorMsg) {
+    public static double getPositiveReal(String inputMsg) {
         while (true) {
             try {
                 System.out.print(inputMsg);
@@ -90,7 +90,7 @@ public class InputHandle {
                 }
                 return inputNum;
             } catch (NumberFormatException e) {
-                System.out.println(errorMsg);
+                e.printStackTrace();
             } catch (Exception e) {
                 System.out.println("Must be greater than 0");
             }
@@ -160,16 +160,16 @@ public class InputHandle {
         }
     }
 
-    public static Date getDate(String inputMsg) {
+    public static Date getDate(String inputMsg , String format) {
         while (true) {
             try {
                 System.out.print(inputMsg);
                 String inputStr = sc.nextLine();
-                DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                DateFormat formatter = new SimpleDateFormat(format);
                 formatter.setLenient(false);
                 return formatter.parse(inputStr);
             } catch (ParseException e) {
-                System.out.println("Invalid date: (dd/MM/yyyy)");
+                System.out.println("Invalid date: (" + format + ")");
             }
         }
     }

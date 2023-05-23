@@ -22,6 +22,7 @@ public class FlowerManager extends HashSet<Flower> {
     public FlowerManager(String path) {
         ArrayList<String> dta = FileHandle.readFromFile(path);
         for (String line : dta) {
+            if (line == null ||line.isEmpty()) continue ;
             String strSplit[] = line.trim().split(",");
             this.add(new Flower(strSplit[0],
                     strSplit[1],
@@ -50,23 +51,23 @@ public class FlowerManager extends HashSet<Flower> {
     }
 
     public void viewList() {
-        PrintingFormat.printLine60();
+        PrintingFormat.printLine80();
         String title = PrintingFormat.print4Args("id", "name", "price", "importDate");
         System.out.println(title);
-        PrintingFormat.printLine60();
+        PrintingFormat.printLine80();
         for (Flower f : this) {
             String line = PrintingFormat.print4Args(f.getId(),
                     f.getName(), Double.toString(f.getPrice()),
                     InputHandle.toDateString(f.getImportDate(), "yyyy/MM/dd"));
             System.out.println(line);
         }
-        PrintingFormat.printLine60();
+        PrintingFormat.printLine80();
         String total = PrintingFormat.printTotal80(String.format("TOTAL: %d flower type[s]", this.size()));
         System.out.println(total);
-        PrintingFormat.printLine60();
+        PrintingFormat.printLine80();
     }
     
-    private Flower find(String id){
+    public Flower find(String id){
         for(Flower f : this){
             if(f.getId().equals(id)) return f ;
         }
@@ -113,5 +114,13 @@ public class FlowerManager extends HashSet<Flower> {
         } else{
             System.out.println("Failed to remove.");
         }
+    }
+    
+    public ArrayList<String> toArrayList(){
+        ArrayList<String> ret = new ArrayList<>();
+        for(Flower s : this){
+            ret.add(s.toString()) ;
+        }
+        return ret;
     }
 }

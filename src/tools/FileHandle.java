@@ -18,7 +18,7 @@ import java.util.ArrayList;
  */
 public class FileHandle {
 
-    private final static String SYSPATH = new File("").getAbsolutePath();
+    private final static String SYSPATH = new File("").getAbsolutePath()+"\\src";
 
     private static String initPath(String path) {
         return SYSPATH + path;
@@ -36,6 +36,7 @@ public class FileHandle {
             }
             input.close();
         } catch (IOException e) {
+            e.printStackTrace();
         }
         return dta;
     }
@@ -47,6 +48,7 @@ public class FileHandle {
             file.createNewFile();
             BufferedWriter output = new BufferedWriter(new FileWriter(file));
             for (String line : dta) {
+                if (line == null ||line.isEmpty()) continue ;
                 output.write(line);
                 output.newLine();
             }

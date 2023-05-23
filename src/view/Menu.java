@@ -34,7 +34,7 @@ public class Menu {
     public int getChoice(){
         while(true){
             try{
-                System.out.print("Choose an option: ");
+                System.out.print("Enter your choice: ");
                 int choice = Integer.parseInt(sc.nextLine()) ;
                 if (choice < 1 || choice > options.size()) throw new Exception() ;
                 return choice ;

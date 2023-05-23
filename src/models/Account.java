@@ -39,7 +39,7 @@ public class Account {
 
     @Override
     public String toString() {
-        String ret = null;
+        String ret = String.format("%s,%s,%s,%s",id,password,role,pId);
         return ret;
     }
 }

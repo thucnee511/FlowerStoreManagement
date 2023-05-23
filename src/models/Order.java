@@ -38,6 +38,14 @@ public class Order {
     public String getBuyerId() {
         return buyerId;
     }
+    
+    public int getFlowerCount(){
+        int ret = 0 ;
+        for (Entry<Flower, Integer> item : oList.entrySet()) {
+            ret += item.getValue() ;
+        }
+        return ret ;
+    }
 
     public HashMap<Flower, Integer> getoList() {
         return oList;
@@ -51,6 +59,7 @@ public class Order {
     }
 
     public void addFlower(Flower flower, int quantity) {
+        total += flower.getPrice() * quantity ;
         if (oList.containsKey(flower)) {
             int quan = oList.get(flower);
             quantity += quan;
@@ -72,11 +81,13 @@ public class Order {
     public void show(){
         PrintingFormat.printLine60();
         String title = PrintingFormat.print3Args("Order ID", "Date", "Buyer ID") ;
+        PrintingFormat.printLine60();
         String _title = PrintingFormat.print3Args(this.id, InputHandle.toDateString(date, "yyyy/MM/dd"), buyerId);
         System.out.println(title + "\n" + _title);
         PrintingFormat.printLine60();
         title = PrintingFormat.print3Args("Flower Name", "Quantity", "Price");
         System.out.println(title);
+        PrintingFormat.printLine60();
         for (Entry<Flower, Integer> item : oList.entrySet()) {
             String line = PrintingFormat.print3Args(item.getKey().getId(),
                     item.getValue().toString(),
@@ -85,6 +96,7 @@ public class Order {
         }
         PrintingFormat.printLine60();
         System.out.println(PrintingFormat.printTotal60(String.format("Total: %f",this.total)));
+        PrintingFormat.printLine60();
     }
 
     @Override

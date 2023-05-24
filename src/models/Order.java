@@ -75,7 +75,7 @@ public class Order {
                     item.getValue(),
                     item.getKey().getPrice() * item.getValue());
         }
-        return ret.substring(0, ret.length() - 2);
+        return ret.substring(0, ret.length() - 1);
     }
     
     public void show(){

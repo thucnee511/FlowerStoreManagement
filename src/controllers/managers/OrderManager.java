@@ -26,7 +26,9 @@ public class OrderManager extends HashSet<Order> {
     public OrderManager(String path, FlowerManager fm) {
         ArrayList<String> dta = FileHandle.readFromFile(path);
         for (String line : dta) {
-            if (line == null ||line.isEmpty()) continue ;
+            if (line == null || line.isEmpty()) {
+                continue;
+            }
             String lineSplit[] = line.trim().split(",");
             Order o = new Order(lineSplit[0],
                     InputHandle.toDate(lineSplit[1], "yyyy/MM/dd"),
@@ -83,6 +85,7 @@ public class OrderManager extends HashSet<Order> {
         System.out.println("Successfully remove");
         this.remove(o);
     }
+//like
 
     public void showList(CustomerManager cm) {
         String sOrd, tOrd;
@@ -121,9 +124,10 @@ public class OrderManager extends HashSet<Order> {
                     InputHandle.toDateString(o.getDate(), "yyyy/MM/dd"),
                     c.getName(),
                     Integer.toString(o.getFlowerCount()),
-                    Double.toString(o.getTotal()));
+                    String.format("%.2f",o.getTotal()));
             total += o.getTotal();
             System.out.println(line);
+            count++;
         }
         PrintingFormat.printLine120();
         String _total = PrintingFormat.printTotal120(String.format("Total: %.2f", total));
@@ -150,44 +154,63 @@ public class OrderManager extends HashSet<Order> {
 
     private Set<Order> sort(String sOrd, String tOrd) {
         Set<Order> ret = new TreeSet<>();
-        boolean asc = tOrd.equals("asc");
-        switch (sOrd) {
-            case "count": {
-                if (asc) {
-                    ret = new TreeSet<>(Comparator.comparingDouble(Order::getFlowerCount));
-                } else {
-                    ret = new TreeSet<>(Comparator.comparingDouble(Order::getFlowerCount).reversed());
-                }
-                break;
-            }
-            case "date": {
-                if (asc) {
-                    ret = new TreeSet<>(Comparator.comparing(Order::getDate));
-                } else {
-                    ret = new TreeSet<>(Comparator.comparing(Order::getDate).reversed());
-                }
-                break;
-            }
-            case "price": {
-                if (asc) {
-                    ret = new TreeSet<>(Comparator.comparingDouble(Order::getTotal));
-                } else {
-                    ret = new TreeSet<>(Comparator.comparingDouble(Order::getTotal).reversed());
-                }
-                break;
-            }
+        if (sOrd.equals("count")) {
+            ret = tOrd.equals("asc") ? new TreeSet<>(new CmpCount()) : new TreeSet<>(new CmpCount().reversed()) ;
+        } else if (sOrd.equals("date")) {
+            ret = tOrd.equals("asc") ? new TreeSet<>(new CmpDate()) : new TreeSet<>(new CmpDate().reversed()) ;
+        } else {
+            ret = tOrd.equals("asc") ? new TreeSet<>(new CmpTotal()) : new TreeSet<>(new CmpTotal().reversed()) ;
         }
         for (Order o : this) {
             ret.add(o);
         }
         return ret;
     }
-    
-    public ArrayList<String> toArrayList(){
+
+    public ArrayList<String> toArrayList() {
         ArrayList<String> ret = new ArrayList<>();
-        for(Order s : this){
-            ret.add(s.toString()) ;
+        for (Order s : this) {
+            ret.add(s.toString());
         }
         return ret;
     }
+}
+
+class CmpDate implements Comparator<Order> {
+
+    @Override
+    public int compare(Order o1, Order o2) {
+        if (o1.getDate().equals(o2.getDate())) {
+            return o1.getId().compareTo(o2.getId());
+        } else {
+            return o1.getDate().compareTo(o2.getDate());
+        }
+    }
+
+}
+
+class CmpCount implements Comparator<Order> {
+
+    @Override
+    public int compare(Order o1, Order o2) {
+        if (Integer.compare(o1.getFlowerCount(), o2.getFlowerCount()) == 0) {
+            return o1.getId().compareTo(o2.getId());
+        } else {
+            return Integer.compare(o1.getFlowerCount(), o2.getFlowerCount());
+        }
+    }
+
+}
+
+class CmpTotal implements Comparator<Order> {
+
+    @Override
+    public int compare(Order o1, Order o2) {
+        if (Double.compare(o1.getTotal(), o2.getTotal()) == 0) {
+            return o1.getId().compareTo(o2.getId());
+        } else {
+            return Double.compare(o1.getTotal(), o2.getTotal());
+        }
+    }
+
 }

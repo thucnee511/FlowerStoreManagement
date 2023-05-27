@@ -61,6 +61,7 @@ public class UserMenu {
         int quantity = InputHandle.getPositiveInt("Enter quantity: ", "");
         Flower flower = fm.find(id);
         order.addFlower(flower, quantity);
+        System.out.println("Succesfully add to cart.");
     }
 
     public void viewOrder() {

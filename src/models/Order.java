@@ -7,7 +7,6 @@ package models;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map.Entry;
-import java.util.Set;
 import tools.InputHandle;
 import tools.PrintingFormat;
 
@@ -89,7 +88,7 @@ public class Order {
         System.out.println(title);
         PrintingFormat.printLine60();
         for (Entry<Flower, Integer> item : oList.entrySet()) {
-            String line = PrintingFormat.print3Args(item.getKey().getId(),
+            String line = PrintingFormat.print3Args(item.getKey().getName(),
                     item.getValue().toString(),
                     Double.toString(item.getKey().getPrice() * item.getValue()));
             System.out.println(line);
